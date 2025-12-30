@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap & Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .header {
+      background: #dc3545;
+      color: white;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+
+    .btn-delete {
+      background-color: #dc3545;
+      border: none;
+    }
+
+    .btn-delete:hover {
+      background-color: #bb2d3b;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h4 class="mb-0">
+      <i class="fas fa-user-shield me-2"></i>
+      Admin Dashboard
+    </h4>
+
+    <form action="/admin/logout" method="POST">
+      <button class="btn btn-light btn-sm">
+        <i class="fas fa-sign-out-alt me-1"></i> Logout
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+  <div class="card p-4">
+
+    <!-- TOP ACTIONS -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <a href="/admin/create" class="btn btn-success">
+        <i class="fas fa-user-plus"></i> Create User
+      </a>
+
+      <!-- SEARCH -->
+      <form action="/admin/search" method="GET" class="d-flex">
+        <input type="text"
+               name="keyword"
+               class="form-control me-2"
+               placeholder="Search by name or email"
+               required>
+        <button class="btn btn-dark">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- USERS TABLE -->
+    <% if (users.length === 0) { %>
+      <p class="text-muted text-center">No users found.</p>
+    <% } else { %>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Created On</th>
+            <th width="150">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach((user, index) => { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <td><%= user.createdAt.toDateString() %></td>
+              <td>
+                <a href="/admin/edit/<%= user._id %>"
+                   class="btn btn-warning btn-sm me-1">
+                  <i class="fas fa-edit"></i>
+                </a>
+
+                <a href="/admin/delete/<%= user._id %>"
+                   class="btn btn-delete btn-sm text-white"
+                   onclick="return confirm('Are you sure you want to delete this user?')">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <% } %>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  (function () {
+    history.pushState(null, null, location.href);
+
+    window.addEventListener('popstate', function () {
+      window.location.replace('/admin/login');
+    });
+  })();
+</script>
+
+
+</body>
+</html>

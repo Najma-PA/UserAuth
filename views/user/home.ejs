@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dashboard-header {
+      background: rgb(100, 61, 240);
+      color: white;
+      padding: 30px 0;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 10px 10px rgba(0, 0, 0, 0.08);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .stats-card {
+      text-align: center;
+      padding: 40px 25px;
+      background: #fff;
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      background: rgb(100, 61, 240);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #fff;
+      margin: 0 auto 15px;
+    }
+
+    #signoutBtn {
+      background-color: #dc3545;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ✅ FIX: Add this check -->
+<% if (!user) { %>
+  <div class="container text-center mt-5">
+    <h2>Not Logged In</h2>
+    <p>Please login first</p>
+    <a href="/user/login" class="btn btn-primary">Login</a>
+  </div>
+<% } else { %>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Dashboard</a>
+
+    <div class="navbar-nav ms-auto">
+      <span class="nav-link text-white">
+        <i class="fas fa-user-circle me-1"></i>
+        <%= user.name %>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- Header -->
+<div class="dashboard-header text-center">
+  <div class="container">
+    <div class="user-avatar">
+      <i class="fas fa-user"></i>
+    </div>
+    <h2>Welcome, <%= user.name %></h2>
+    <p class="opacity-75"><%= user.email %></p>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="row text-center">
+
+    <div class="col-md-4 mb-3">
+      <div class="card stats-card">
+        <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+        <p class="text-muted">Total Visits</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card stats-card">
+        <i class="fas fa-users fa-3x text-success mb-3"></i>
+        <p class="text-muted">Active Users</p>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card stats-card">
+        <i class="fas fa-comments fa-3x text-info mb-3"></i>
+        <p class="text-muted">Messages</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Logout -->
+  <div class="row mt-4">
+    <div class="col text-center">
+     <form action="/user/logout" method="GET">
+  <button id="signoutBtn" class="btn btn-danger px-5 py-2">
+    Sign Out
+  </button>
+</form>
+    </div>
+  </div>
+</div>
+
+<% } %>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  (function () {
+    // Replace history entry
+    history.pushState(null, null, location.href);
+
+    window.addEventListener('popstate', function () {
+      window.location.replace('/user/login');
+    });
+  })();
+</script>
+
+</body>
+</html>
